@@ -14,21 +14,22 @@ namespace WindowsService1
 {
     class PictureService
     {
+        ILogger logger;
+        public PictureService(ILogger _logger)
+        {
+            logger = _logger;
+        }
         public string CombineTextPicture(string url, string ru, string en)
         {
             System.Drawing.Text.PrivateFontCollection f = new System.Drawing.Text.PrivateFontCollection();
-            string path = Directory.GetCurrentDirectory();
-            EventLog myLog = new EventLog();
-            myLog.Source = "VkAutoPosting";
-            myLog.WriteEntry($"{path}");
+            string path = Directory.GetCurrentDirectory();            
             try
             {
-                myLog.WriteEntry($"{Application.StartupPath}");
+                
                 f.AddFontFile(Path.Combine(Application.StartupPath, "Font","userfont2.ttf"));
-               // f.AddFontFile("C:\\Font\\userfont.otf");
-            } catch (Exception e)
+            } catch (Exception ex)
             {
-                myLog.WriteEntry($"ошибка со шрифтом {e.Message} {e.InnerException} {e.StackTrace}");
+                f.AddFontFile(Path.Combine(Application.StartupPath,  "userfont.otf"));
             }
             var request = WebRequest.Create(url);
 
@@ -76,7 +77,7 @@ namespace WindowsService1
                 img.Save(@"C:\ImagesForVk\" + name + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg); //путь и имя сохранения файла
             } catch (Exception e)
             {
-                myLog.WriteEntry($"ошибка со сохранением {e.Message} {e.InnerException} {e.StackTrace}");
+                logger.LogErrorMessage($"Ошибка! Ошибка с сохранением {e.Message} {e.InnerException} {e.StackTrace}");
             }
             return name;
         }

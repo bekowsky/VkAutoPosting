@@ -15,17 +15,21 @@ namespace VkAutoPosting
     {
         static void Main(string[] args)
         {
+            ILogger logger;
+            if (Environment.UserInteractive)
+                logger = new ConsoleLogger();
+            else logger = new WindowsLogger("");
 
 
-            var master = new MasterService();
+            var master = new MasterService(logger);
 
-            master.PostPicktureVk();
-           // var chrome = new SubscriberChromeBot();
-            
+            master.Cleaning();
+
+            // var chrome = new SubscriberChromeBot();
 
 
 
-            //var vk = new BossLikeBot("+79992035141", "1999dbyrcIlove^^");
+            //var vk = new BossLikeBot("+79992035141", "1999dbyrcIlove21");
             //vk.Initialising();
             //vk.Subscrubing();
 

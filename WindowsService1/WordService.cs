@@ -13,6 +13,11 @@ namespace WindowsService1
     {
         Random random = new Random();
         WordsContext db = new WordsContext();
+        ILogger logger;
+        public WordService(ILogger _logger)
+        {
+            logger = _logger;
+        }
         public void FillDB()
         {
 
@@ -30,7 +35,7 @@ namespace WindowsService1
 
             }
             db.SaveChanges();
-            myLog.WriteEntry($"Успешно добавили слова в БД");
+            logger.LogSuccessMessage($"Успешно добавили слова в БД");
 
         }
 
@@ -49,7 +54,7 @@ namespace WindowsService1
                 return arr;
             } catch(Exception ex)
             {
-                myLog.WriteEntry($"Ошибка WordService.TakeWordTranslate {ex.Message}");
+                logger.LogErrorMessage($"Ошибка WordService.TakeWordTranslate {ex.Message}");
             }
 
             return null;

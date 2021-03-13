@@ -37,6 +37,11 @@ namespace WindowsService1
     }
     class ImageService
     {
+        ILogger logger;
+        public ImageService(ILogger _logger)
+        {
+            logger = _logger;
+        }
         public string TakeHtml(string Word)
         {
             string data = "";
@@ -61,10 +66,17 @@ namespace WindowsService1
 
         public IDocument TakeHtmlChrome(string Word)
         {
-            var chrome = new UniversalChromeDriver();
-            var html = chrome.GetPage("https://yandex.ru/images/search?text=" + Word + "&isize=large&itype=jpg");
-            chrome.EndSession();
-            return html;
+            try
+            {
+                var chrome = new UniversalChromeDriver();
+                var html = chrome.GetPage("https://yandex.ru/images/search?text=" + Word + "&isize=large&itype=jpg");
+                chrome.EndSession();
+                return html;
+            } catch (Exception ex)
+            {
+                logger.LogErrorMessage($"Ошибка! Ошибка загрузки страницы через chrome {ex.Message}");
+            }
+            return null;
         }
 
         public List<string> ParseHtml(string Html, int Count = 1)
@@ -126,6 +138,7 @@ namespace WindowsService1
             }
             catch (Exception ex)
             {
+                logger.LogErrorMessage($"Ошибка! Ошибка парсинга страницы {ex.Message}");
                 return null;
             }
 

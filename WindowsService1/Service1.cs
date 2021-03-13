@@ -20,13 +20,17 @@ namespace WindowsService1
 
         protected override void OnStart(string[] args)
         {
-            var master = new MasterService();
-
+            ILogger logger;
+            if (Environment.UserInteractive)
+                logger = new ConsoleLogger();
+            else logger = new WindowsLogger("");
+            var master = new MasterService(logger);
             Thread masterThread = new Thread(new ThreadStart(master.Start));
+            Thread cleaningThread = new Thread(new ThreadStart(master.Cleaning));
             masterThread.Start();
+            cleaningThread.Start();
 
-           
-            
+
         }
 
         protected override void OnStop()
