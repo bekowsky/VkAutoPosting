@@ -21,10 +21,10 @@ namespace WindowsService1
         {
          
 
-            ImageService imgClient = new ImageService();
-            WordService wordClient = new WordService();
-            VkService serviceVkClient = new VkService();
-            PictureService servicePicture = new PictureService();
+            ImageService imgClient = new ImageService(logger);
+            WordService wordClient = new WordService(logger);
+            VkService serviceVkClient = new VkService(logger);
+            PictureService servicePicture = new PictureService(logger);
 
       
 
